@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
@@ -122,22 +123,19 @@ class Paint extends JFrame {
 		}
 	} };
 	Tool tool;
-
 	JPanel panel;
+	JButton button;
 
 	public Paint(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(800, 600));
-		JButton Color = 
-		add(new JToolBar() {
-			{
+		add(new JToolBar() {{
 				for (AbstractAction tool : tools) {
 					add(tool);
 				}
-				add(new JButton("Color"));
-			}
-		}, BorderLayout.NORTH);
+				add(button = new JButton("Color"));
+		}}, BorderLayout.NORTH);
 		add(panel = new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -151,6 +149,19 @@ class Paint extends JFrame {
 					g2.setColor(entry.getValue());
 					g2.draw(entry.getKey());
 				}
+			}
+		});
+		
+		/* 
+		 * Implementation of the Function inspired by 
+		 * https://perso.telecom-paristech.fr/hudry/coursJava/interSwing/couleurs.html
+		 */
+		button.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				color = JColorChooser.showDialog
+					    (null, "Pen's Color", Color.WHITE);
+				
 			}
 		});
 
