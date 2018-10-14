@@ -90,7 +90,6 @@ class Paint extends JFrame {
 			if (path == null) {
 				path = new Path2D.Double();
 				path.moveTo(o.getX(), o.getY());
-				System.out.println(color);
 				shapesList.put(shape = path, color);
 			}
 			path.lineTo(e.getX(), e.getY());
@@ -101,7 +100,6 @@ class Paint extends JFrame {
 			Rectangle2D.Double rect = (Rectangle2D.Double) shape;
 			if (rect == null) {
 				rect = new Rectangle2D.Double(o.getX(), o.getY(), 0, 0);
-				System.out.println(color);
 				shapesList.put(shape = rect, color);
 			}
 			rect.setRect(min(e.getX(), o.getX()), min(e.getY(), o.getY()), abs(e.getX() - o.getX()),
@@ -113,8 +111,6 @@ class Paint extends JFrame {
 			Ellipse2D.Double elli = (Ellipse2D.Double) shape;
 			if (elli == null) {
 				elli = new Ellipse2D.Double(o.getX(), o.getY(), 0, 0);
-
-				System.out.println(color);
 				shapesList.put(shape = elli, color);
 			}
 			elli.setFrame(min(e.getX(), o.getX()), min(e.getY(), o.getY()), abs(e.getX() - o.getX()),
@@ -130,18 +126,19 @@ class Paint extends JFrame {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(800, 600));
-		add(new JToolBar() {{
+		add(new JToolBar() {
+			{
 				for (AbstractAction tool : tools) {
 					add(tool);
 				}
 				add(button = new JButton("Color"));
-		}}, BorderLayout.NORTH);
+			}
+		}, BorderLayout.NORTH);
 		add(panel = new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
 				g2.setColor(Color.WHITE);
 				g2.fillRect(0, 0, getWidth(), getHeight());
 
@@ -151,17 +148,16 @@ class Paint extends JFrame {
 				}
 			}
 		});
-		
-		/* 
-		 * Implementation of the Function inspired by 
-		 * https://perso.telecom-paristech.fr/hudry/coursJava/interSwing/couleurs.html
+
+		/*
+		 * Implementation of the Function inspired by
+		 * https://perso.telecom-paristech.fr/hudry/coursJava/interSwing/
+		 * couleurs.html
 		 */
-		button.addActionListener(new ActionListener(){
+		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				color = JColorChooser.showDialog
-					    (null, "Pen's Color", Color.WHITE);
-				
+				color = JColorChooser.showDialog(null, "Pen's Color", Color.WHITE);
 			}
 		});
 
