@@ -1,12 +1,4 @@
 package paint;
-//////////////////////////////////////////////////////////////////////////////
-
-// file    : Paint.java
-// content : basic painting app
-//////////////////////////////////////////////////////////////////////////////
-
-/* imports *****************************************************************/
-
 import static java.lang.Math.*;
 
 import java.util.HashMap;
@@ -29,6 +21,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+import controller.Tool;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.AbstractAction;
@@ -37,54 +31,13 @@ import javax.swing.JColorChooser;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
-/* paint *******************************************************************/
-
 class Paint extends JFrame {
 	HashMap<Shape, Color> shapesList = new HashMap<Shape, Color>();
 	Color color = Color.BLACK;
 
-	class Tool extends AbstractAction implements MouseInputListener {
-		Point o;
-		Shape shape;
-
-		public Tool(String name) {
-			super(name);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("using tool " + this);
-			panel.removeMouseListener(tool);
-			panel.removeMouseMotionListener(tool);
-			tool = this;
-			panel.addMouseListener(tool);
-			panel.addMouseMotionListener(tool);
-		}
-
-		public void mouseClicked(MouseEvent e) {
-		}
-
-		public void mouseEntered(MouseEvent e) {
-		}
-
-		public void mouseExited(MouseEvent e) {
-		}
-
-		public void mousePressed(MouseEvent e) {
-			o = e.getPoint();
-		}
-
-		public void mouseReleased(MouseEvent e) {
-			shape = null;
-		}
-
-		public void mouseDragged(MouseEvent e) {
-		}
-
-		public void mouseMoved(MouseEvent e) {
-		}
-	}
-
-	Tool tools[] = { new Tool("Pen") {
+	Tool tool;
+	JPanel panel;
+	Tool tools[] = { new Tool("Pen", panel, tool) {
 		public void mouseDragged(MouseEvent e) {
 			Path2D.Double path = (Path2D.Double) shape;
 			if (path == null) {
@@ -95,7 +48,7 @@ class Paint extends JFrame {
 			path.lineTo(e.getX(), e.getY());
 			panel.repaint();
 		}
-	}, new Tool("Rect") {
+	}, new Tool("Rect", panel, tool) {
 		public void mouseDragged(MouseEvent e) {
 			Rectangle2D.Double rect = (Rectangle2D.Double) shape;
 			if (rect == null) {
@@ -106,7 +59,7 @@ class Paint extends JFrame {
 					abs(e.getY() - o.getY()));
 			panel.repaint();
 		}
-	}, new Tool("Ellipse") {
+	}, new Tool("Ellipse", panel, tool) {
 		public void mouseDragged(MouseEvent e) {
 			Ellipse2D.Double elli = (Ellipse2D.Double) shape;
 			if (elli == null) {
@@ -118,8 +71,6 @@ class Paint extends JFrame {
 			panel.repaint();
 		}
 	} };
-	Tool tool;
-	JPanel panel;
 	JButton button;
 
 	public Paint(String title) {
@@ -164,8 +115,6 @@ class Paint extends JFrame {
 		pack();
 		setVisible(true);
 	}
-
-	/* main *********************************************************************/
 
 	public static void main(String argv[]) {
 		SwingUtilities.invokeLater(new Runnable() {
