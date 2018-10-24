@@ -3,13 +3,12 @@ package view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
+
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicSliderUI.TrackListener;
 
 import control.MarkingMenu;
 
@@ -70,6 +69,7 @@ public class MarkingMenuUI extends ComponentUI {
 		int nbTools = menu.listTools().size();
 		int ind = -1;
 
+		// Calculates the angle with the mouse position
 		int angle = (int) Math.toDegrees(Math.atan2(y, x));
 		for (int i = 0; i < nbTools; i++) {
 			if (angle >= i * 360 / nbTools && angle < (i + 1) * 360 / nbTools) {
@@ -104,7 +104,6 @@ public class MarkingMenuUI extends ComponentUI {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
