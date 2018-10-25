@@ -22,10 +22,6 @@ import java.awt.geom.Rectangle2D;
 
 import java.awt.event.*;
 import javax.swing.event.*;
-
-import control.MarkingMenu;
-import view.MarkingMenuUI;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.AbstractAction;
@@ -35,7 +31,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
 class Paint extends JFrame {
-	String[] nameTools = { "Color", "Pen", "Back" };
+	String[] nameTools = { "Pen", "Rect", "Elli" };
 	HashMap<Shape, Color> shapesList = new HashMap<Shape, Color>();
 	Color color = Color.BLACK;
 	MarkingMenu menu = new MarkingMenu(nameTools);
@@ -83,7 +79,7 @@ class Paint extends JFrame {
 		}
 
 		public void mouseDragged(MouseEvent e) {
-			
+
 			switch (s) {
 			// Left Button
 			case LEFT_PRESSED:
@@ -106,9 +102,12 @@ class Paint extends JFrame {
 				break;
 			// Right Button
 			case RIGHT_PRESSED:
-				s = State.IDLE;
-				JButton selectedTool = new JButton(tools[menuUI.posToTool((int) o.getX(), (int) o.getY())]);
-				selectedTool.doClick();
+				s = State.I
+				DLE;
+				if(((int) o.getX() != menuUI.getX() || ((int) o.getY()) != menuUI.getY())){
+					JButton selectedTool = new JButton(tools[menuUI.posToTool((int) o.getX(), (int) o.getY())]);
+					selectedTool.doClick();
+				}
 				menuUI = null;
 				panel.repaint();
 				break;

@@ -1,4 +1,4 @@
-package control;
+package paint;
 
 
 public class MarkingMenu {
