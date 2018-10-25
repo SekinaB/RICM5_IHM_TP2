@@ -1,18 +1,12 @@
 package paint;
-//////////////////////////////////////////////////////////////////////////////
-
-// file    : Paint.java
-// content : basic painting app
-//////////////////////////////////////////////////////////////////////////////
-
-/* imports *****************************************************************/
+/**
+ * NOTATION : PHOTO
+ */
 
 import static java.lang.Math.*;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
@@ -29,6 +23,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+import control.MarkingMenu;
+import view.MarkingMenuUI;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.AbstractAction;
@@ -37,15 +34,21 @@ import javax.swing.JColorChooser;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
-/* paint *******************************************************************/
-
 class Paint extends JFrame {
+	String[] nameTools = { "Color", "Pen", "Back" };
 	HashMap<Shape, Color> shapesList = new HashMap<Shape, Color>();
 	Color color = Color.BLACK;
+	MarkingMenu menu = new MarkingMenu(nameTools);
+	MarkingMenuUI menuUI;
+
+	enum State {
+		IDLE, RIGHT_PRESSED, LEFT_PRESSED;
+	}
 
 	class Tool extends AbstractAction implements MouseInputListener {
 		Point o;
 		Shape shape;
+		State s;
 
 		public Tool(String name) {
 			super(name);
@@ -60,6 +63,62 @@ class Paint extends JFrame {
 			panel.addMouseMotionListener(tool);
 		}
 
+		public void mousePressed(MouseEvent e) {
+			o = e.getPoint();
+			switch (e.getButton()) {
+			// Left Button
+			case 1:
+				s = State.LEFT_PRESSED;
+				o = e.getPoint();
+				break;
+
+			// Right Button
+			case 3:
+				s = State.RIGHT_PRESSED;
+				menuUI = new MarkingMenuUI(menu, (int) o.getX(), (int) o.getY());
+				panel.repaint();
+				break;
+			default:
+			}
+		}
+
+		public void mouseDragged(MouseEvent e) {
+			
+			switch (s) {
+			// Left Button
+			case LEFT_PRESSED:
+				toolMouseDragged(e);
+				break;
+			// Right Button
+			case RIGHT_PRESSED:
+				o = e.getPoint();
+				break;
+			default:
+			}
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			switch (s) {
+			// Left Button
+			case LEFT_PRESSED:
+				s = State.IDLE;
+				shape = null;
+				break;
+			// Right Button
+			case RIGHT_PRESSED:
+				s = State.IDLE;
+				JButton selectedTool = new JButton(tools[menuUI.posToTool((int) o.getX(), (int) o.getY())]);
+				selectedTool.doClick();
+				menuUI = null;
+				panel.repaint();
+				break;
+			default:
+			}
+		}
+
+		public void mouseMoved(MouseEvent e) {
+		}
+
 		public void mouseClicked(MouseEvent e) {
 		}
 
@@ -69,23 +128,12 @@ class Paint extends JFrame {
 		public void mouseExited(MouseEvent e) {
 		}
 
-		public void mousePressed(MouseEvent e) {
-			o = e.getPoint();
-		}
-
-		public void mouseReleased(MouseEvent e) {
-			shape = null;
-		}
-
-		public void mouseDragged(MouseEvent e) {
-		}
-
-		public void mouseMoved(MouseEvent e) {
+		public void toolMouseDragged(MouseEvent e) {
 		}
 	}
 
 	Tool tools[] = { new Tool("Pen") {
-		public void mouseDragged(MouseEvent e) {
+		public void toolMouseDragged(MouseEvent e) {
 			Path2D.Double path = (Path2D.Double) shape;
 			if (path == null) {
 				path = new Path2D.Double();
@@ -96,7 +144,7 @@ class Paint extends JFrame {
 			panel.repaint();
 		}
 	}, new Tool("Rect") {
-		public void mouseDragged(MouseEvent e) {
+		public void toolMouseDragged(MouseEvent e) {
 			Rectangle2D.Double rect = (Rectangle2D.Double) shape;
 			if (rect == null) {
 				rect = new Rectangle2D.Double(o.getX(), o.getY(), 0, 0);
@@ -107,7 +155,7 @@ class Paint extends JFrame {
 			panel.repaint();
 		}
 	}, new Tool("Ellipse") {
-		public void mouseDragged(MouseEvent e) {
+		public void toolMouseDragged(MouseEvent e) {
 			Ellipse2D.Double elli = (Ellipse2D.Double) shape;
 			if (elli == null) {
 				elli = new Ellipse2D.Double(o.getX(), o.getY(), 0, 0);
@@ -146,6 +194,9 @@ class Paint extends JFrame {
 					g2.setColor(entry.getValue());
 					g2.draw(entry.getKey());
 				}
+				if (menuUI != null) {
+					menuUI.drawMenu(g2);
+				}
 			}
 		});
 
@@ -164,8 +215,6 @@ class Paint extends JFrame {
 		pack();
 		setVisible(true);
 	}
-
-	/* main *********************************************************************/
 
 	public static void main(String argv[]) {
 		SwingUtilities.invokeLater(new Runnable() {
