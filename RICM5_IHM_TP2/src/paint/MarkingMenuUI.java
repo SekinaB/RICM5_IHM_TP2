@@ -40,37 +40,37 @@ public class MarkingMenuUI {
 	 */
 	public void drawMenu(Graphics g) {
 		double fullAngle = 2 * Math.PI;
-		String[] listTools = menu.getlistTools();
+		String[] listLabels = menu.getlistLabels();
 
 		// Draws the circular base of the marking menu
 		g.setColor(Color.BLACK);
 		g.drawOval(x - radius, y - radius, diameter, diameter);
 
 		// Draws the items of the menu in the base
-		for (int i = 0; i < listTools.length; i++) {
+		for (int i = 0; i < listLabels.length; i++) {
 			// Draws the separator
-			g.drawLine(x, y, x + (int) (radius * (Math.cos(i * fullAngle / listTools.length))),
-					y + (int) (radius * (Math.sin(i * fullAngle / listTools.length))));
+			g.drawLine(x, y, x + (int) (radius * (Math.cos(i * fullAngle / listLabels.length))),
+					y + (int) (radius * (Math.sin(i * fullAngle / listLabels.length))));
 			// Draws the label of each items
-			g.drawString(listTools[i],
+			g.drawString(listLabels[i],
 					x + (int) ((radius * 2 / 3)
-							* Math.cos((i * fullAngle / listTools.length) + Math.PI / listTools.length)),
+							* Math.cos((i * fullAngle / listLabels.length) + Math.PI / listLabels.length)),
 					y + (int) ((radius * 2 / 3)
-							* Math.sin((i * fullAngle / listTools.length) + Math.PI / listTools.length)));
+							* Math.sin((i * fullAngle / listLabels.length) + Math.PI / listLabels.length)));
 		}
 
 		/*
 		 * Implementation abandoned : Not useful in the future
 		 * 
-		 * // If more then 8 items if (listTools.length > 8) { for (int i = 8; i
-		 * < listTools.length; i++) { g.drawRect(x - 50, i * (y + radius), 100,
-		 * 50); g.drawString(listTools[i].toString(), x -
-		 * listTools[i].toString().length() / 2, i * (y + 25 + radius)); } }
+		 * // If more then 8 items if (listLabels.length > 8) { for (int i = 8;
+		 * i < listLabels.length; i++) { g.drawRect(x - 50, i * (y + radius),
+		 * 100, 50); g.drawString(listLabels[i].toString(), x -
+		 * listLabels[i].toString().length() / 2, i * (y + 25 + radius)); } }
 		 */
 	}
 
 	/**
-	 * Returns the index of tool, in listTools, corresponding to the mouse's
+	 * Returns the index of tool, in listLabels, corresponding to the mouse's
 	 * position
 	 * 
 	 * @param x
@@ -81,7 +81,7 @@ public class MarkingMenuUI {
 	 */
 	public int posToTool(int x, int y) {
 		// TODO : verify the calculus of the angle
-		int nbTools = menu.getlistTools().length;
+		int nbLabels = menu.getlistLabels().length;
 		int ind = -1;
 
 		// Calculates the angle with the mouse position
@@ -95,13 +95,30 @@ public class MarkingMenuUI {
 		// to have a angle that goes clockwise
 		angle = 360 - angle;
 
-		// goes through the tools to find the one corresponding to the angle
-		for (int i = 0; i < nbTools; i++) {
-			if (angle >= (i * 360 / nbTools) && angle < ((i + 1) * 360 / nbTools)) {
+		// goes through the Labels to find the one corresponding to the angle
+		for (int i = 0; i < nbLabels; i++) {
+			if (angle >= (i * 360 / nbLabels) && angle < ((i + 1) * 360 / nbLabels)) {
 				ind = i;
 			}
 		}
 		return ind;
+	}
+
+	/**
+	 * Returns true if the mouse it out of the first MarkingMenu, in the
+	 * direction of the option Tool
+	 * 
+	 * @param x
+	 *            abscissa of the mouse's position
+	 * @param y
+	 *            ordinate of the mouse's position
+	 * @return boolean
+	 */
+	public boolean outOfTools(int x, int y) {
+		// Calculate the distance between the center of the menu and the mouse's position
+		int l = (int) Math.sqrt(Math.pow((this.x - x), 2) + Math.pow((this.y - y), 2));
+		
+		return (posToTool(x, y) == 1 && l >= radius && menu.isfirst());
 	}
 
 	/**
