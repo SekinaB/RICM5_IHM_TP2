@@ -102,8 +102,7 @@ class Paint extends JFrame {
 				break;
 			// Right Button
 			case RIGHT_PRESSED:
-				s = State.I
-				DLE;
+				s = State.IDLE;
 				if(((int) o.getX() != menuUI.getX() || ((int) o.getY()) != menuUI.getY())){
 					JButton selectedTool = new JButton(tools[menuUI.posToTool((int) o.getX(), (int) o.getY())]);
 					selectedTool.doClick();
