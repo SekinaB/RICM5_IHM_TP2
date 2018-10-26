@@ -117,9 +117,10 @@ public class MarkingMenuUI {
 	 * @return boolean
 	 */
 	public boolean outOfTools(int x, int y) {
-		// Calculate the distance between the center of the menu and the mouse's position
+		// Calculate the distance between the center of the menu and the mouse's
+		// position
 		int l = (int) Math.sqrt(Math.pow((this.x - x), 2) + Math.pow((this.y - y), 2));
-		
+
 		return (posToTool(x, y) == 1 && l >= radius && menu.isfirst());
 	}
 

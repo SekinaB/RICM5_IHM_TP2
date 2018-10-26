@@ -57,7 +57,7 @@ class Paint extends JFrame {
 		// Position of the mouse
 		Point o;
 		// State in which we're in
-		State s;
+		State s = State.IDLE;
 
 		public Tool(String name) {
 			super(name);
@@ -74,22 +74,25 @@ class Paint extends JFrame {
 
 		public void mousePressed(MouseEvent e) {
 			o = e.getPoint();
-			switch (e.getButton()) {
-			// Left Button
-			case 1:
-				// Change state and get current position
-				s = State.LEFT_PRESSED;
-				o = e.getPoint();
-				break;
+			// If no other button is pressed
+			if (s == State.IDLE) {
+				switch (e.getButton()) {
+				// Left Button
+				case 1:
+					// Change state and get current position
+					s = State.LEFT_PRESSED;
+					o = e.getPoint();
+					break;
 
-			// Right Button
-			case 3:
-				// Change state and draw the MarkingMenu
-				s = State.RIGHT_PRESSED;
-				menuUI = new MarkingMenuUI(menu, (int) o.getX(), (int) o.getY());
-				panel.repaint();
-				break;
-			default:
+				// Right Button
+				case 3:
+					// Change state and draw the MarkingMenu
+					s = State.RIGHT_PRESSED;
+					menuUI = new MarkingMenuUI(menu, (int) o.getX(), (int) o.getY());
+					panel.repaint();
+					break;
+				default:
+				}
 			}
 		}
 
@@ -213,7 +216,7 @@ class Paint extends JFrame {
 			panel.repaint();
 		}
 	} };
-	
+
 	Tool tool;
 	JPanel panel;
 	JButton button;

@@ -1,24 +1,26 @@
 package paint;
 
-
 public class MarkingMenu {
-	
+
 	// List of the elements' names in the menu
-	private String[]  listLabels;
+	private String[] listLabels;
 	// True is the MarkingManu is the first displayed
 	private boolean first;
-	
+
 	/**
 	 * Constructor of MarkingMenu
-	 * @param listTools List of the tools' names
+	 * 
+	 * @param listTools
+	 *            List of the tools' names
 	 */
-	public MarkingMenu(String[] listLabels, boolean first){
+	public MarkingMenu(String[] listLabels, boolean first) {
 		this.listLabels = listLabels;
 		this.first = first;
 	}
-	
+
 	/**
 	 * Getter of the listTools
+	 * 
 	 * @return listTools
 	 */
 	public String[] getlistLabels() {
@@ -27,6 +29,7 @@ public class MarkingMenu {
 
 	/**
 	 * Getter of first
+	 * 
 	 * @return first
 	 */
 	public boolean isfirst() {
