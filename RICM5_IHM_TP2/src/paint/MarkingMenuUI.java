@@ -43,6 +43,8 @@ public class MarkingMenuUI {
 		String[] listLabels = menu.getlistLabels();
 
 		// Draws the circular base of the marking menu
+		g.setColor(Color.WHITE);
+		g.fillOval(x - radius, y - radius, diameter, diameter);
 		g.setColor(Color.BLACK);
 		g.drawOval(x - radius, y - radius, diameter, diameter);
 

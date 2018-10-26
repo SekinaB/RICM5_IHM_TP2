@@ -213,6 +213,7 @@ class Paint extends JFrame {
 			panel.repaint();
 		}
 	} };
+	
 	Tool tool;
 	JPanel panel;
 	JButton button;
@@ -237,10 +238,12 @@ class Paint extends JFrame {
 				g2.setColor(Color.WHITE);
 				g2.fillRect(0, 0, getWidth(), getHeight());
 
+				// Draws each Shape with their own color
 				for (Entry<Shape, Color> entry : shapesList.entrySet()) {
 					g2.setColor(entry.getValue());
 					g2.draw(entry.getKey());
 				}
+				// In the menu is not null, draw it in the graphics
 				if (menuUI != null) {
 					menuUI.drawMenu(g2);
 				}
@@ -255,6 +258,7 @@ class Paint extends JFrame {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Opens a Dialog to choose a color
 				currentColor = JColorChooser.showDialog(null, "Pen's Color", Color.WHITE);
 			}
 		});
